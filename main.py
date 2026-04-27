@@ -62,7 +62,8 @@ def generate_grf(alpha, H, K_ratio, K_tilde_ratio=None, L=2048, sparsity=0.1):
     phases = np.random.uniform(0, 2*np.pi, (L, L))
     F_complex = np.sqrt(psi_dense) * np.exp(1j * phases) # Amplitude (A in the paper) is sqrt(psi_hat)
     
-    # Create discrete/sparse sampling of k-vectors
+    # Sparsity makes the pixels in the spectral density more sparse; mirroring the paper
+    # Create sparse sampling of k-vectors
     if sparsity < 1.0:
         mask = np.random.rand(L, L) < sparsity
         F_complex *= mask
@@ -74,7 +75,7 @@ def generate_grf(alpha, H, K_ratio, K_tilde_ratio=None, L=2048, sparsity=0.1):
     power_spectrum = np.abs(F_hermitian)**2
     
     # Inverse FFT to get the physical scalar field
-    phi = np.real(np.fft.ifft2(F_hermitian))
+    phi = np.real(np.fft.ifft2(F_hermitian)) # The code for the paper did not use ifft; maybe need to modify
     
     # Normalize field so that max|phi(x)| = 1
     nu = 1.0 / np.max(np.abs(phi))
@@ -129,10 +130,10 @@ def plot_row(alpha, H, K_ratio, K_tilde_ratio=None):
     # Spectral Density
     ps_shifted = np.fft.fftshift(ps)
     ps_norm = ps_shifted / (np.max(ps_shifted) + 1e-12)
-    ps_log = np.log10(ps_norm + 1e-12)
+    ps_log = np.log10(ps_norm + 1e-12) # log scale as used in the code for the paper
     ps_vis = maximum_filter(ps_log, size=3)
 
-    axs[0].imshow(ps_vis, cmap='hot', vmin=-4.0, vmax=0.0)
+    axs[0].imshow(ps_vis, cmap='hot', vmin=-4.0, vmax=0.0) # vmin and vmax values as used in the code for the paper
     axs[0].set_title(r'$\widehat{\psi}(\mathbf{k})$')
     axs[0].axis('off')
     
@@ -148,7 +149,6 @@ def plot_row(alpha, H, K_ratio, K_tilde_ratio=None):
     if len(p1) > 0:
         axs[2].scatter(p1[:, 0], p1[:, 1], c='red', s=5, alpha=0.5, label=r'$\mathcal{P}_1$')
     
-    # Style the PH diagram to match the paper
     axs[2].plot([-5, 5], [-5, 5], c='gray', lw=1)
     axs[2].fill_between([-5, 5], [-5, 5], -5, color='lightgray', alpha=0.5) # death < birth region
     axs[2].set_xlim(-5, 5)
@@ -180,7 +180,7 @@ print("Figure 5 - Row 5: alpha=100.0, H=0.01, K/fmax=0.8")
 plot_row(alpha=100.0, H=0.01, K_ratio=0.8)
 plt.savefig("figure5_row5.png", dpi=300)
 
-# Figure 6, Column 1 (Non-HU)
+# Figure 6
 print("Figure 6 - Row 1: K_tilde/fmax = 0.05")
 plot_row(alpha=100.0, H=0.0, K_ratio=0.8, K_tilde_ratio=0.05)
 plt.savefig("figure6_row1.png", dpi=300)
