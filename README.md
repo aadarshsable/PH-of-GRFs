@@ -1,21 +1,23 @@
 # Hyperuniformity in terms of stochastic processes
 
 Consider a stochastic process $\varphi(\mathbf{x}):\Omega \to \mathbb{R}$ where $\Omega \subset \mathbb{R}^d$. Its autocovariance; considering $\mathbf{x}_t$ to be the time factor vector; is given by
-$$
-\begin{array}{rcl}
-R_{\varphi}(\mathbf{x}_1 - \mathbf{x}_2) & = & \text{cov}[\varphi(\mathbf{x}_1), \varphi(\mathbf{x}_2)] \\
-& = & \mathbb{E}[(\varphi(\mathbf{x}_1) - \mathbb{E}[\varphi(\mathbf{x}_1)])(\varphi(\mathbf{x}_2) - \mathbb{E}[\varphi(\mathbf{x}_2)])] \\
-& = & \mathbb{E}[\varphi(\mathbf{x}_1)\varphi(\mathbf{x}_2)] - \mathbb{E}[\varphi(\mathbf{x}_1)]\mathbb{E}[\varphi(\mathbf{x}_2)]
-\end{array}
-$$
+```math
+\begin{aligned}
+R_{\varphi}(\mathbf{x}_1 - \mathbf{x}_2)
+&= \text{cov}[\varphi(\mathbf{x}_1), \varphi(\mathbf{x}_2)] \\
+&= \mathbb{E}[(\varphi(\mathbf{x}_1) - \mathbb{E}[\varphi(\mathbf{x}_1)])(\varphi(\mathbf{x}_2) - \mathbb{E}[\varphi(\mathbf{x}_2)])] \\
+&= \mathbb{E}[\varphi(\mathbf{x}_1)\varphi(\mathbf{x}_2)] - \mathbb{E}[\varphi(\mathbf{x}_1)]\mathbb{E}[\varphi(\mathbf{x}_2)]
+\end{aligned}
+```
 
 The spectral density is given by the Fourier transform of this autocovariance function
-$$
-\begin{array}{rcl}
-\widehat{R}_\varphi(\mathbf{f}) & = & S_\varphi(\mathbf{f}) \\
-& = & |\widehat{\varphi}(\mathbf{f})|^2
-\end{array}
-$$
+```math
+\begin{aligned}
+\widehat{R}_\varphi(\mathbf{f})
+&= S_\varphi(\mathbf{f}) \\
+&= |\widehat{\varphi}(\mathbf{f})|^2
+\end{aligned}
+```
 where $\mathbf{f}$ is the wave frequency vector.
 
 The process $\varphi(\mathbf{x})$ is said to be hyperuniform if
