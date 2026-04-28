@@ -37,7 +37,7 @@ def psi_hat(k, alpha, H, K, f_max):
     
     return psi
 
-def generate_grf(alpha, H, K_ratio, K_tilde_ratio=None, L=2048, sparsity=0.1):
+def generate_grf(alpha, H, K_ratio, K_tilde_ratio=None, L=2048, sparsity=1.0):
     """Generates the GRF scalar field as described in Eq 3.1"""
     # Create frequency grid
     kx = np.fft.fftfreq(L) * 2 * np.pi
@@ -47,7 +47,7 @@ def generate_grf(alpha, H, K_ratio, K_tilde_ratio=None, L=2048, sparsity=0.1):
     
     # f_max = (100 * np.pi) / L # As described in the paper
     # Above value did not work
-    f_max = np.pi
+    f_max = np.pi / 3 # This makes the shortest wavelength ~6 pixels, as Abel explained to me
     K_val = K_ratio * f_max # As defined in the paper
     
     # Base HU Spectrum
@@ -72,7 +72,7 @@ def generate_grf(alpha, H, K_ratio, K_tilde_ratio=None, L=2048, sparsity=0.1):
     F_hermitian = enforce_hermitian(F_complex)
     F_hermitian[0, 0] = 0.0 # Ensure zero mean (no DC offset)
     
-    power_spectrum = np.abs(F_hermitian)**2
+    spectral_density = np.abs(F_hermitian)**2
     
     # Inverse FFT to get the physical scalar field
     phi = np.real(np.fft.ifft2(F_hermitian)) # The code for the paper did not use ifft; maybe need to modify
@@ -81,7 +81,7 @@ def generate_grf(alpha, H, K_ratio, K_tilde_ratio=None, L=2048, sparsity=0.1):
     nu = 1.0 / np.max(np.abs(phi))
     phi = nu * phi
     
-    return power_spectrum, phi
+    return spectral_density, phi
 
 def compute_signed_distance(phi, c=0.0):
     """Signed distance as defined in Eq 2.7"""
@@ -121,7 +121,7 @@ def plot_row(alpha, H, K_ratio, K_tilde_ratio=None):
     phi_crop = phi[:256, :256]
     
     # Persistent Homology
-    signed_dist = compute_signed_distance(phi_crop)
+    signed_dist = compute_signed_distance(phi)
     p0, p1 = compute_ph(signed_dist)
     
     # Visualization
@@ -134,6 +134,9 @@ def plot_row(alpha, H, K_ratio, K_tilde_ratio=None):
     ps_vis = maximum_filter(ps_log, size=3)
 
     axs[0].imshow(ps_vis, cmap='hot', vmin=-4.0, vmax=0.0) # vmin and vmax values as used in the code for the paper
+    center = ps_vis.shape[0] // 2
+    axs[0].set_xlim(center - 600, center + 600)
+    axs[0].set_ylim(center - 600, center + 600) # Zoom into the central region
     axs[0].set_title(r'$\widehat{\psi}(\mathbf{k})$')
     axs[0].axis('off')
     
@@ -149,10 +152,10 @@ def plot_row(alpha, H, K_ratio, K_tilde_ratio=None):
     if len(p1) > 0:
         axs[2].scatter(p1[:, 0], p1[:, 1], c='red', s=5, alpha=0.5, label=r'$\mathcal{P}_1$')
     
-    axs[2].plot([-5, 5], [-5, 5], c='gray', lw=1)
-    axs[2].fill_between([-5, 5], [-5, 5], -5, color='lightgray', alpha=0.5) # death < birth region
-    axs[2].set_xlim(-5, 5)
-    axs[2].set_ylim(-5, 5)
+    axs[2].plot([-10, 10], [-10, 10], c='gray', lw=1)
+    axs[2].fill_between([-10, 10], [-10, 10], -10, color='lightgray', alpha=0.5) # death < birth region
+    axs[2].set_xlim(-10, 10)
+    axs[2].set_ylim(-10, 10)
     axs[2].set_xlabel('birth $r$')
     axs[2].set_ylabel('death $r$')
     axs[2].legend(loc='lower right')
