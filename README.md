@@ -2,17 +2,19 @@
 
 Consider a stochastic process $\varphi(\mathbf{x}):\Omega \to \mathbb{R}$ where $\Omega \subset \mathbb{R}^d$. Its autocovariance; considering $\mathbf{x}_t$ to be the time factor vector; is given by
 $$
-R_{\varphi}(\mathbf{x}_1 - \mathbf{x}_2)
-&= \text{cov}[\varphi(\mathbf{x}_1), \varphi(\mathbf{x}_2)] \\
-&= \mathbb{E}[(\varphi(\mathbf{x}_1) - \mathbb{E}[\varphi(\mathbf{x}_1)])(\varphi(\mathbf{x}_2) - \mathbb{E}[\varphi(\mathbf{x}_2)])] \\
-&= \mathbb{E}[\varphi(\mathbf{x}_1)\varphi(\mathbf{x}_2)] - \mathbb{E}[\varphi(\mathbf{x}_1)]\mathbb{E}[\varphi(\mathbf{x}_2)]
+\begin{array}{rcl}
+R_{\varphi}(\mathbf{x}_1 - \mathbf{x}_2) & = & \text{cov}[\varphi(\mathbf{x}_1), \varphi(\mathbf{x}_2)] \\
+& = & \mathbb{E}[(\varphi(\mathbf{x}_1) - \mathbb{E}[\varphi(\mathbf{x}_1)])(\varphi(\mathbf{x}_2) - \mathbb{E}[\varphi(\mathbf{x}_2)])] \\
+& = & \mathbb{E}[\varphi(\mathbf{x}_1)\varphi(\mathbf{x}_2)] - \mathbb{E}[\varphi(\mathbf{x}_1)]\mathbb{E}[\varphi(\mathbf{x}_2)]
+\end{array}
 $$
 
 The spectral density is given by the Fourier transform of this autocovariance function
 $$
-\widehat{R}_\varphi(\mathbf{f})
-&= S_\varphi(\mathbf{f}) \\
-&= |\widehat{\varphi}(\mathbf{f})|^2
+\begin{array}{rcl}
+\widehat{R}_\varphi(\mathbf{f}) & = & S_\varphi(\mathbf{f}) \\
+& = & |\widehat{\varphi}(\mathbf{f})|^2
+\end{array}
 $$
 where $\mathbf{f}$ is the wave frequency vector.
 
